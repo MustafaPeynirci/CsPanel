@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import dashboard from "@/views/Dashboard";
 import login from "@/views/login";
 import categoryView from "@/views/Category/categoryView";
 import newCategoryView from "@/views/Category/newCategoryView";
 import categoryEditView from "@/views/Category/categoryEditView";
 import store from "@/store";
 import errorView from "@/views/errorView";
+import dashboard from "@/views/Dashboard";
 const routes = [
   {
     path: '/login',
