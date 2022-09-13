@@ -10,12 +10,15 @@
     <input type="text" class="form-control" id="exampleFormControlInput1" v-model="newCategory.name">
     </div>
     <div class="mb-3">
-    <label for="formFile" class="form-label">Resim</label>
-    <input class="form-control" type="file" id="formFile" ref="file" @change="uploadFile">
-    </div>
-    <div class="mb-3">
     <label for="exampleFormControlTextarea1" class="form-label">İçerik</label>
     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="newCategory.content"></textarea>
+    </div>
+    <div class="mb-3">
+    <label for="formFile" class="form-label">Resim</label>
+    <div class="img-input">
+    <img :src="this.image == null ? require('@/assets/defauldimage.png') : this.image" class="img" alt="Resim Ekle">
+    <input class="form-control change-img-input" type="file" id="formFile" ref="file" @change="uploadImage" >
+    </div>
     </div>
     <div class="newItemBtnGroup">
     <router-link
@@ -41,10 +44,11 @@ export default {
         name: '',
         image1: null,
         content: '',
-      }
+      },
+      image: null,
     }
   },
-   methods:{
+  methods:{
     createNewCategory(){
       let formdata = new FormData();
       if (this.newCategory.image1 !== null){
@@ -89,13 +93,23 @@ export default {
           }})
       })
     },
-    uploadFile(e) {
-      if(this.$refs.file.files[0] !== null){
-        this.newCategory.image1  = this.$refs.file.files[0]
-      }else {
-        this.newCategory.image1  = null
-      }
-    },
+    // uploadFile(e) {
+    //   if(this.$refs.file.files[0] !== null){
+    //     this.newCategory.image1  = this.$refs.file.files[0]
+    //   }else {
+    //     this.newCategory.image1  = null
+    //   }
+    // },
+     uploadImage(e){
+       const image = e.target.files[0];
+       const reader = new FileReader();
+       reader.readAsDataURL(image);
+       reader.onload = e =>{
+         this.previewImage = e.target.result;
+         this.image = this.previewImage;
+         this.newCategory.image1  = this.$refs.file.files[0]
+       };
+     },
     },
 }
 </script>
@@ -122,5 +136,30 @@ export default {
 }
 .closeBtn:hover{
   color: #dc3545;
+}
+.img{
+  width: 200px;
+  max-width: 200px;
+  height: 150px;
+  border-radius: 5px;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+}
+.img-input{
+  display: flex;
+  justify-content: start;
+}
+.change-img-input{
+  margin: 25px;
+  width: 75%;
+  align-self: center;
+}
+@media only screen and (max-width: 768px) {
+  .img-input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

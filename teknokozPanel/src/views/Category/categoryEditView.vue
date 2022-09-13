@@ -9,13 +9,16 @@
     <input type="email" class="form-control" id="exampleFormControlInput1" v-model="this.editCategory.name" >
     </div>
     <div class="mb-3">
-    <label for="formFile" class="form-label">Resim</label>
-    <input class="form-control" type="file" id="formFile" ref="file" @change="uploadFile" >
-    </div>
-    <div class="mb-3">
     <label for="exampleFormControlTextarea1" class="form-label">İçerik</label>
     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="this.editCategory.content" ></textarea>
     </div>
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Resim</label>
+        <div class="img-input">
+          <img :src="this.editCategory.image" class="img" alt="">
+          <input class="form-control change-img-input" type="file" id="formFile" ref="file" @change="uploadImage" >
+        </div>
+      </div>
     <div class="newItemBtnGroup">
     <router-link
     to="/category"
@@ -93,11 +96,21 @@ export default {
           }})
       })
     },
-    uploadFile(e) {
-      if(this.$refs.file.files[0] !== null){
+    // uploadFile(e) {
+    //   if(this.$refs.file.files[0] !== null){
+    //     this.editCategory.image1  = this.$refs.file.files[0]
+    //   }
+    // },
+    uploadImage(e){
+      const image = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = e =>{
+        this.previewImage = e.target.result;
         this.editCategory.image1  = this.$refs.file.files[0]
-      }
-    },
+        this.editCategory.image = this.previewImage
+      };
+    }
   },
   computed:{
     getEditCategory(){
@@ -141,5 +154,30 @@ export default {
 }
 .closeBtn:hover{
   color: #dc3545;
+}
+.img{
+  width: 200px;
+  max-width: 200px;
+  height: 150px;
+  border-radius: 5px;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+}
+.img-input{
+  display: flex;
+  justify-content: start;
+}
+.change-img-input{
+  margin: 25px;
+  width: 75%;
+  align-self: center;
+}
+@media only screen and (max-width: 768px) {
+ .img-input{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
 }
 </style>
